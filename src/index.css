@@ -37,15 +37,27 @@ h1, h2, h3 {
     0 0 60px rgba(0, 255, 195);
   filter: brightness(1);
 
-  @apply font-nebula font-bold text-white
+  @apply font-nebula font-bold
+}
+
+h1 {
+  @apply text-white text-5xl md:text-[55px]
 }
 
 h2 {
-  @apply text-6xl
+  @apply text-4xl text-white font-nebula uppercase tracking-widest md:text-5xl lg:text-6xl
+}
+
+h3 {
+  @apply text-xl md:text-2xl
+}
+
+button {
+  @apply cursor-pointer
 }
 
 .glow-wrapper {
-  filter: drop-shadow(0 0 30px #ff9900);
+  filter: drop-shadow(0 0 30px rgba(255, 153, 0, 0.3));
 }
 
 .primary-border {
@@ -154,120 +166,108 @@ h2 {
 .ui-btn span {
   letter-spacing: var(--btn-letter-spacing);
   transition: var(--btn-transition);
-
   position: relative;
+  /* width: 100%;
+  height: 100%; */
+  /* @apply flex justify-center items-center */
 }
 
 .ui-btn span::before {
-  box-sizing: border-box;
-  position: absolute;
   content: "";
+  position: absolute;
+  font-family: inherit;
+  font-size: inherit;
+  color: var(--default-btn-color);
+  z-index: 1;
+  pointer-events: none;
 }
 
-/* .ui-btn:hover span,
-.ui-btn:focus span {
-  color: var(--hover-btn-color);
-} */
 
-.ui-btn:hover span::before,
-.ui-btn:focus span::before {
+.group:hover .ui-btn span::before {
   animation: chitchat linear both var(--btn-animation-duration);
 }
 
 @keyframes chitchat {
   0% {
-    content: "o#";
+    content: "#å";
   }
 
   5% {
-    content: ".~";
+    content: ".~@";
   }
 
   10% {
-    content: "^{!";
+    content: "#.1]";
   }
 
   15% {
-    content: "-!";
+    content: "^{\}";
   }
 
   20% {
-    content: "#1!$";
+    content: "#1\№22";
   }
 
   25% {
-    content: "№:30";
+    content: "№:#.1s2";
   }
 
   30% {
-    content: "#{.1`";
+    content: "№:#.1s22";
   }
 
   35% {
-    content: "@}-3?";
+    content: "@}-}]";
   }
 
   40% {
-    content: "?{4@%";
-  }
-
-  45% {
-    content: "=.,^22!";
+    content: "?{s2";
   }
 
   50% {
-    content: "?2@%";
+    content: "??";
   }
 
   55% {
-    content: "\;1}]";
+    content: "\]";
   }
 
   60% {
-    content: "?{%:%";
+    content: "\]";
     right: 0;
   }
 
   65% {
-    content: "|{f[4";
+    content: "\]";
     right: 0;
   }
+
 
   70% {
-    content: "{4%0%";
+    content: "4";
     right: 0;
   }
 
-  75% {
-    content: "'1_0<";
-    right: 0;
-  }
+
 
   80% {
-    content: "{0%";
+    content: "{";
     right: 0;
   }
 
-  85% {
-    content: "]>'";
-    right: 0;
-  }
 
   90% {
-    content: "4?";
+    content: "";
     right: 0;
   }
 
-  95% {
-    content: "2/";
-    right: 0;
-  }
 
   100% {
     content: "";
     right: 0;
   }
 }
+
 
 .glow-text {
   text-shadow:
@@ -277,8 +277,7 @@ h2 {
 
 }
 
-
-.background-grid::before {
+/* .background-grid::before {
   content: '';
   position: absolute;
   top: 0;
@@ -290,10 +289,10 @@ h2 {
     linear-gradient(to bottom, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
   background-size: 50px 50px;
   z-index: 0;
-}
+} */
 
 .perspective-wrapper {
-  perspective: 2000px;
+  perspective: 1000px;
   transform-style: preserve-3d;
   overflow: visible;
 }
@@ -305,6 +304,75 @@ h2 {
   @apply bg-primary/50
 }
 
-/* .info p {
-  @apply w-fit
-} */
+
+.track {
+  animation: prgBar 1s linear 1 forwards
+}
+
+
+@keyframes prgBar {
+  0% {
+    width: 0%;
+  }
+
+  9.99% {
+    width: 0%;
+  }
+
+  10% {
+    width: 10%;
+  }
+
+  95% {
+    width: 100%;
+  }
+
+  100% {
+    width: 100%;
+  }
+}
+
+.bar {
+  position: relative;
+  height: 20px;
+  width: 10px;
+  background-color: #00ffff;
+  position: relative;
+  border-radius: 2px;
+  box-shadow: 0px 0px 5px #00ffff;
+  margin-left: 2px;
+  margin-right: 2px;
+  margin-bottom: 100px;
+  top: 2px;
+  float: left;
+}
+
+/* Add to your CSS file */
+
+.fade-out {
+  animation: fadeOut .5s ease forwards;
+}
+
+@keyframes fadeOut {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+.fade-in {
+  animation: fadeIn .5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    scale: .5;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+
+  }
+}

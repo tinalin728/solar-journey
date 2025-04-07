@@ -1,32 +1,239 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { LoadQueue } from "preload-js";
 import gsap from 'gsap';
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 gsap.registerPlugin(ScrollTrigger);
 
 import PlanetInfoModal from '../components/PlanetInfoModal';
-import planets from "../data/planets"
+import planetsData from "../data/planets"
+import LoadingScreen from '../components/LoadingScreen';
+import { SoundContext } from '../components/SoundProvider';
+
+
+import on from '../../public/icons/sound-on.svg'
+import off from '../../public/icons/sound-off.svg'
+import home from '../../public/icons/home.svg'
+import loadingSound from '/sound/loading.mp3';
 
 export default function Planets() {
+    const planets = planetsData || [];
+    const [isLoaded, setIsLoaded] = useState(false);
+    const [index, setIndex] = useState(0);
+    const [displayedIndex, setDisplayedIndex] = useState(0);
+    const [isSunReady, setIsSunReady] = useState(false);
+    const [time, setTime] = useState("");
+    const [date, setDate] = useState("");
+    const [speed, setSpeed] = useState(10500);
+
+
     const containerRef = useRef();
     const cardsRef = useRef([]);
+    const borderRef = useRef(null);
     const textRef = useRef([]);
-    const [index, setIndex] = useState(0);
+    const preloaderRef = useRef(null);
+    const contentRef = useRef(null);
+
     const totalItems = planets.length;
     const isAnimating = useRef(false);
 
     const [modalOpen, setModalOpen] = useState(false);
     const modalOpenRef = useRef(false);
+    const currentPlanet = planets[index] || {};
+    const hasAnimatedOnce = useRef(false);
 
-    const currentPlanet = planets[index]
+    const { isSoundOn, setIsSoundOn, playClickSound, playScrollSound, playHoverSound } = useContext(SoundContext);
+    const navigate = useNavigate();
+
+    const playLoadingSound = () => {
+        if (!isSoundOn) return;
+
+        const loadingSound = new Audio('/sound/loading.mp3');
+        loadingSound.volume = 0.4;
+        loadingSound.playbackRate = 1.3;
+        loadingSound.play();
+    };
+    // preloader
+    useEffect(() => {
+        const queue = new LoadQueue(true);
+        playLoadingSound();
+
+        const sun = planets.find(p => p.name === "Sun");
+        if (sun) {
+            const modelUrl = sun.model.startsWith('/')
+                ? `${window.location.origin}${sun.model}`
+                : sun.model;
+
+            // console.log(`Preloading Sun model: ${modelUrl}`);
+            planets.forEach((planet) => {
+                const modelUrl = planet.model.startsWith('/')
+                    ? `${window.location.origin}${planet.model}`
+                    : planet.model;
+
+                queue.loadFile({ id: planet.name, src: modelUrl });
+            });
+        }
+
+        queue.on('complete', () => {
+            if (preloaderRef.current) {
+                preloaderRef.current.classList.add('fade-out');
+
+                setTimeout(() => {
+
+                    if (contentRef.current) {
+                        contentRef.current.classList.add('fade-in');
+                    }
+
+                    setIsSunReady(true);
+                    setIsLoaded(true);
+                }, 1000);
+            };
+        });
+
+        queue.on('error', e => {
+            console.error(`Failed to load ${e.item.id}`, e);
+            setIsLoaded(true);
+        });
+
+        return () => {
+            queue.removeAllEventListeners();
+        };
+    }, [planets]);
+
+    // planet position
+    function getTransformForOffset(offset, planet) {
+        let x = 0, y = 0, z = 0, scale = 1.4, opacity = 1;
+
+        if (offset === 0) {
+            x = 0;
+            y = (planet.name === 'Saturn' || planet.name === 'Uranus') ? -20 : 120;
+            z = 0;
+            scale = (planet.name === 'Saturn' || planet.name === 'Uranus') ? 3.2 : 2.5;
+        } else if (offset === 1) {
+            x = 550; y = -280; z = -300; scale = 0.5; opacity = 0.8;
+        } else if (offset === 2) {
+            x = -450; y = -480; z = -300; scale = 0.2; opacity = 0.3;
+        } else if (offset === 3) {
+            x = 450; y = -480; z = -300; scale = 0.2; opacity = 0;
+        } else {
+            x = -100; y = 80; z = 800; scale = 0.1; opacity = 0;
+        }
+
+        return { x, y, z, scale, opacity };
+    }
 
     useEffect(() => {
-        const handleScroll = (e) => {
-            // if (modalOpenRef.current) {
-            //     e.preventDefault();
-            //     return;
-            // }
-            e.preventDefault();
+        if (!isLoaded || hasAnimatedOnce.current) return;
 
+        hasAnimatedOnce.current = true;
+
+        const tl = gsap.timeline();
+
+        tl.fromTo(borderRef.current, {
+            scaleX: 0,
+            transformOrigin: "center",
+        }, {
+            scaleX: 1,
+            duration: 1,
+            ease: "power4.out"
+        });
+
+        // Set initial planet positions
+        cardsRef.current.forEach((card, i) => {
+            const offset = i - index;
+            const transform = getTransformForOffset(offset, planets[i]);
+            gsap.set(card, {
+                ...transform,
+                transformPerspective: 2000,
+                transformOrigin: "center",
+                zIndex: i === index ? 10 : 0,
+            });
+        });
+
+        // 3. Animate cards after border
+        cardsRef.current.forEach((card, i) => {
+            const offset = i - index;
+            const transform = getTransformForOffset(offset, planets[i]);
+            tl.to(card, {
+                ...transform,
+                duration: 1,
+                ease: "sine.inOut",
+                transformPerspective: 2000,
+                transformOrigin: "center",
+                immediateRender: false,
+                zIndex: i === index ? 10 : 0,
+            }, "-=0.6");
+        });
+
+        // 4. Animate textRef
+        tl.fromTo(textRef.current, {
+            opacity: 0,
+            y: 20,
+        }, {
+            opacity: 1,
+            y: 0,
+            duration: 0.8,
+            ease: "sine.out",
+        });
+
+    }, [isLoaded]);
+
+    useEffect(() => {
+        if (!isLoaded || !hasAnimatedOnce.current || !textRef.current) return;
+
+        playScrollSound();
+
+        const tl = gsap.timeline();
+
+        // Card animations (simultaneous)
+        cardsRef.current.forEach((card, i) => {
+            const offset = i - index;
+            const transform = getTransformForOffset(offset, planets[i]);
+
+            tl.to(card, {
+                ...transform,
+                duration: 1,
+                ease: 'sine.inOut',
+                transformPerspective: 2000,
+                transformOrigin: 'center',
+                immediateRender: false,
+                zIndex: i === index ? 10 : 0,
+                onComplete: () => {
+                    if (planets[i].name === "Sun") {
+                        card.classList.add('glow-wrapper');
+                    }
+                    isAnimating.current = false;
+                },
+            }, 0);
+        });
+
+        tl.to(textRef.current, {
+            opacity: 0,
+            y: 20,
+            duration: 0.5,
+            ease: 'sine.in',
+            onComplete: () => {
+                setDisplayedIndex(index);
+            }
+        }, "<");
+
+        tl.to(textRef.current, {
+            opacity: 1,
+            y: 0,
+            duration: 0.5,
+            ease: 'sine.out',
+        });
+
+    }, [index, isLoaded]);
+
+
+    // scroll, modal control
+    useEffect(() => {
+        if (!isLoaded || modalOpen) return;
+
+        const handleScroll = (e) => {
+
+            e.preventDefault();
 
             const rect = containerRef.current.getBoundingClientRect();
             const fullyInView = rect.top <= 0 && rect.bottom >= window.innerHeight;
@@ -55,11 +262,6 @@ export default function Planets() {
             if (nextIndex !== index) {
                 isAnimating.current = true;
                 setIndex(nextIndex);
-
-                // Debounce scroll for 800ms (match animation)
-                // setTimeout(() => {
-                //     isAnimating.current = false;
-                // }, 800);
             }
         };
 
@@ -71,254 +273,144 @@ export default function Planets() {
             window.removeEventListener('wheel', handleScroll);
         };
 
-    }, [index, modalOpen]);
+    }, [index, modalOpen, isLoaded]);
 
+
+    const handleHomeClick = () => {
+        playClickSound();
+        setTimeout(() => navigate('/'), 100);
+    };
+
+    const handleSoundToggle = () => {
+
+        const nextState = !isSoundOn;
+
+        if (nextState) {
+            const clickSound = new Audio('/sound/click.mp3');
+            clickSound.volume = 0.5;
+            clickSound.play();
+        }
+
+        setIsSoundOn(nextState);
+    }
+
+    // time date
     useEffect(() => {
-        cardsRef.current.forEach((card, i) => {
-            const offset = i - index;
+        const updateTime = () => {
+            const now = new Date();
 
-            let x = 0;
-            let y = 0;
-            let z = 0;
-            let scale = 1.4;
-            let opacity = 1;
-            let filter = 'blur(0px)';
-
-            if (offset === 0) {
-                // Main planet in front
-                x = 0;
-                y = (planets[i].name === 'Saturn' || planets[i].name === 'Uranus') ? -20 : 120;
-                z = 0;
-                scale = (planets[i].name === 'Saturn' || planets[i].name === 'Uranus') ? 3.2 : 2.5;
-                filter = 'blur(0px)';
-
-            } else if (offset === 1) {
-                // Next planet, to the right, behind
-                x = 550;
-                y = -280;
-                z = -300;
-                scale = 0.5;
-                opacity = .8;
-                filter = 'blur(4px)';
-
-
-            } else if (offset === 2) {
-                // Previous planet, to the left, behind
-                x = -450;
-                y = -480;
-                z = -300;
-                scale = 0.2;
-                opacity = .3;
-                filter = 'blur(8px)';
-
-            } else if (offset === 3) {
-                x = 450;
-                y = -480;
-                z = -300;
-                scale = 0.2;
-                opacity = 0;
-            } else {
-                // Hide far planets
-                opacity = 0;
-                scale = 0.1;
-                x = -100;
-                y = 80;
-                z = 800;
-            }
-
-            gsap.to(card, {
-                x,
-                y,
-                z,
-                scale,
-                opacity,
-                duration: 1,
-                ease: 'sine.inOut',
-                transformPerspective: 2000,
-                transformOrigin: 'center',
-                zIndex: i === index ? 10 : 0,
-                onComplete: () => {
-                    isAnimating.current = false;
-                },
+            const formattedTime = now.toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
+                second: "2-digit",
+                hour12: false, // 24-hour
             });
 
-            // find the inner wrapper for blur and animate it
-            const wrapper = card.querySelector('.glow-wrapper') || card.querySelector('div');
-            if (wrapper) {
-                gsap.to(wrapper, {
-                    filter,
-                    duration: 1,
-                    ease: 'sine.out',
-                });
-            }
-        });
+            const formattedDate = now.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "2-digit",
+            });
 
-        if (!textRef.current) return;
+            setTime(formattedTime);
+            setDate(formattedDate);
+        };
 
-        gsap.fromTo(
-            textRef.current,
-            { opacity: 0, y: 20 },
-            {
-                opacity: 1,
-                y: 0,
-                duration: .8,
-                ease: 'sine.inOut',
-            }
-        );
-    }, [index]);
+        updateTime();
+        const interval = setInterval(updateTime, 1000);
 
+        return () => clearInterval(interval);
+    }, []);
 
+    useEffect(() => {
+        const interval = setInterval(() => {
+            const fluctuation = Math.floor(Math.random() * 6) - 3;
+            setSpeed(prev => Math.max(10200, prev + fluctuation));
+        }, 500); // update every 1 second
+
+        return () => clearInterval(interval);
+    }, []);
 
     return (
-        <section className="h-screen overflow-hidden relative" ref={containerRef}>
-            <div ref={textRef} className="z-30 absolute top-10 w-full text-center">
+        <section className="h-screen overflow-hidden relative bg-black" ref={containerRef}>
+            {!isLoaded || !isSunReady ? (
+                <div ref={preloaderRef} id='preloader'>
+                    <LoadingScreen />
+                </div>
+            ) :
+                (
+                    <>
+                        <div ref={contentRef} id='content' className='relative h-full z-20 w-full'>
+                            <div className='absolute w-full h-screen p-4 md:p-10 lg:p-14 z-30'>
+                                <div ref={borderRef} className='absolute top-0 primary-border w-full h-full z-30'>
+                                    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 flex gap-2 items-center justify-between max-w-[90rem] w-full mx-auto px-4 md:top-6 md:px-6">
+                                        <button onClick={handleHomeClick} >
+                                            <img src={home} alt="home" className='w-[40px]' />
+                                        </button>
+                                        <button onClick={handleSoundToggle}>
+                                            <img src={isSoundOn ? on : off}
+                                                alt="sound" width={40} />
+                                        </button>
+                                    </div>
 
-                <h2 className="mt-10 text-6xl font-nebukla uppercase tracking-widest">{planets[index].name}</h2>
-                <p className="max-w-2xl mx-auto mt-4 text-base font-light px-4">
-                    {planets[index].description}
-                </p>
-
-                <PlanetInfoModal
-                    setModalOpen={setModalOpen}
-                    modalOpenRef={modalOpenRef}
-                    planet={currentPlanet}
-                />
-
-            </div>
-            <ul className="perspective-wrapper relative w-full h-full z-20">
-                {planets.map((planet, i) => (
-                    <li
-                        key={i}
-                        ref={(el) => (cardsRef.current[i] = el)}
-                        className="absolute bottom-0 left-1/2 -translate-x-1/2 flex items-center justify-center text-2xl font-bold rounded-full"
-                    >
-                        <div className="w-full h-full flex items-center justify-center">
-                            <div className={`${planet.glowClass} transition-all duration-500`}
-                                style={{ filter: planet.blur }}>
-                                <model-viewer
-                                    src={planet.model}
-                                    auto-rotate
-                                    interaction-prompt="none"
-                                    camera-controls
-                                    disable-zoom
-                                    disable-pan
-                                    disable-tap
-                                    {...(planet.modelScale && { 'model-scale': planet.modelScale })}
-                                    tone-mapping="reinhard"
-                                    {...(planet.needsEnv && { 'environment-image': '/space.hdr' })}
-
-                                    className="w-[230px] h-[230px] md:w-[280px] md:h-[280px] lg:w-[320px] lg:h-[320px]"
-                                ></model-viewer>
+                                    <div className='w-full flex justify-between items-center px-4 absolute bottom-4 md:px-6'>
+                                        <div className='font-nebula text-2xl text-white/90 glow-text md:text-3xl lg:text-4xl'>
+                                            <p> {time}</p>
+                                            <p className='text-lg md:text-xl'> {date}</p>
+                                        </div>
+                                        <div className="flex flex-col justify-center items-end text-white/90 glow-text">
+                                            <p className="font-nebula text-2xl font-bold text-center md:text-3xl lg:text-4xl">{speed.toLocaleString()}</p>
+                                            <p className="font-nebula text-lg tracking-widest text-center md:text-xl">KM/M</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
 
-                    </li>
-                ))}
-            </ul>
+                            <div ref={textRef} className="absolute top-20 left-1/2 -translate-x-1/2 w-full px-3 text-center opacity-0 z-40 md:w-fit">
+                                <h2 className="mt-10"> {planets[displayedIndex]?.name}</h2>
+                                <p className="max-w-2xl mx-auto mt-4 mb-6 text-base font-light px-4 lg:mb-8">{planets[displayedIndex]?.description}</p>
+
+                                <PlanetInfoModal
+                                    setModalOpen={setModalOpen}
+                                    modalOpenRef={modalOpenRef}
+                                    planet={currentPlanet}
+                                />
+
+                            </div>
+
+                            <ul className="perspective-wrapper w-full h-full">
+                                {planets.map((planet, i) => (
+                                    <li
+                                        key={planet.name}
+                                        ref={(el) => (cardsRef.current[i] = el)}
+                                        className="absolute bottom-0 left-1/2 -translate-x-1/2 flex items-center justify-center text-2xl font-bold rounded-full"
+                                    >
+                                        <div className="w-full h-full flex items-center justify-center">
+                                            <div className={`${planet.glowClass} transition-all duration-500`} style={{ filter: planet.blur }}>
+                                                <model-viewer
+                                                    key={planet.name}
+                                                    className="w-[230px] h-[230px] md:w-[280px] md:h-[280px] lg:w-[320px] lg:h-[320px]"
+                                                    src={planet.model}
+                                                    loading="eager"
+                                                    auto-rotate
+                                                    interaction-prompt="none"
+                                                    camera-controls
+                                                    disable-zoom
+                                                    disable-pan
+                                                    disable-tap
+                                                    {...(planet.modelScale && { 'model-scale': planet.modelScale })}
+                                                    tone-mapping="reinhard"
+                                                    {...(planet.needsEnv && { 'environment-image': '/space.hdr' })}
+                                                ></model-viewer>
+                                            </div>
+                                        </div>
+                                    </li>
+                                ))}
+
+                            </ul>
+                        </div>
+                    </>
+                )}
         </section>
     );
 }
-
-
-// const planets = [
-//     {
-//         name: 'Sun',
-//         model: '/sun.glb',
-//         needsEnv: true,
-//         glowClass: "glow-wrapper",
-//         description: 'The Sun is the star at the center of the Solar System and the source of light and heat for all planets.'
-//     },
-//     {
-//         name: 'Mercury',
-//         model: '/mercury2.glb',
-//         glowClass: "",
-//         needsEnv: false,
-//         description: 'Mercury is the smallest planet in the Solar System and closest to the Sun.'
-//     },
-//     {
-//         name: 'Venus',
-//         model: '/venus.glb',
-//         glowClass: "",
-//         needsEnv: false,
-//         description: 'Venus is the second planet from the Sun and has a thick, toxic atmosphere.'
-//     },
-//     {
-//         name: 'Earth',
-//         model: '/earth.glb',
-//         glowClass: "",
-//         needsEnv: false,
-//         description: 'Earth is the third planet from the Sun and the only astronomical object known to harbor life.'
-//     },
-//     {
-//         name: 'Mars',
-//         model: '/mars.glb',
-//         glowClass: "",
-//         needsEnv: false,
-//         description: 'Mars is known as the Red Planet and is home to the tallest mountain in the Solar System.'
-//     },
-//     {
-//         name: 'Jupiter',
-//         model: '/jupiter.glb',
-//         glowClass: "",
-//         needsEnv: false,
-//         description: 'Jupiter is the largest planet in the Solar System and has a giant red storm.'
-//     },
-//     {
-//         name: 'Saturn',
-//         model: '/saturn.glb',
-//         needsEnv: false,
-//         modelScale: '2 2 2',
-//         glowClass: "",
-//         description: 'Saturn is famous for its stunning rings made of ice and rock.'
-//     },
-//     {
-//         name: 'Uranus',
-//         model: '/uranus.glb',
-//         needsEnv: false,
-//         glowClass: "",
-//         description: 'Uranus rotates on its side and has a pale blue color due to methane in its atmosphere.'
-//     },
-//     {
-//         name: 'Neptune',
-//         model: '/neptune.glb',
-//         needsEnv: false,
-//         glowClass: "",
-//         description: 'Neptune is a deep blue planet known for its strong winds and storms.'
-//     },
-// ];
-
-// useEffect(() => {
-//     cardsRef.current.forEach((card, i) => {
-//         const offset = i - index;
-
-//         gsap.to(card, {
-//             x: `${offset * 700}px`,
-//             y: i === index
-//                 ? (planets[i].name === 'Saturn' || planets[i].name === 'Uranus' ? '0px' : '180px')
-//                 : '-250px',
-//             scale: i === index ? 2.8 : 0.8,
-//             zIndex: i === index ? 10 : 1,
-//             opacity: 1,
-//             duration: 1,
-//             ease: 'sine.inOut',
-//             transformPerspective: 1000,
-//             onComplete: () => {
-//                 isAnimating.current = false;
-//             },
-//         });
-//     });
-
-//     if (!textRef.current) return;
-
-//     gsap.fromTo(
-//         textRef.current,
-//         { opacity: 0, y: 20 },
-//         {
-//             opacity: 1,
-//             y: 0,
-//             duration: 1.5,
-//             ease: 'sine.out',
-//         }
-//     );
-
-// }, [index]);
