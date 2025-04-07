@@ -42,17 +42,9 @@ export default function Planets() {
     const currentPlanet = planets[index] || {};
     const hasAnimatedOnce = useRef(false);
 
-    const { isSoundOn, setIsSoundOn, playClickSound, playScrollSound, playHoverSound } = useContext(SoundContext);
+    const { isSoundOn, setIsSoundOn, playClickSound, playScrollSound, playLoadingSound } = useContext(SoundContext);
     const navigate = useNavigate();
 
-    const playLoadingSound = () => {
-        if (!isSoundOn) return;
-
-        const loadingSound = new Audio('/sound/loading.mp3');
-        loadingSound.volume = 0.4;
-        loadingSound.playbackRate = 1.3;
-        loadingSound.play();
-    };
     // preloader
     useEffect(() => {
         const queue = new LoadQueue(true);
@@ -150,34 +142,9 @@ export default function Planets() {
             });
         });
 
-        // 3. Animate cards after border
-        cardsRef.current.forEach((card, i) => {
-            const offset = i - index;
-            const transform = getTransformForOffset(offset, planets[i]);
-            tl.to(card, {
-                ...transform,
-                duration: 1,
-                ease: "sine.inOut",
-                transformPerspective: 2000,
-                transformOrigin: "center",
-                immediateRender: false,
-                zIndex: i === index ? 10 : 0,
-            }, "-=0.6");
-        });
-
-        // 4. Animate textRef
-        tl.fromTo(textRef.current, {
-            opacity: 0,
-            y: 20,
-        }, {
-            opacity: 1,
-            y: 0,
-            duration: 0.8,
-            ease: "sine.out",
-        });
-
     }, [isLoaded]);
 
+    // animation after page loads
     useEffect(() => {
         if (!isLoaded || !hasAnimatedOnce.current || !textRef.current) return;
 
@@ -278,7 +245,7 @@ export default function Planets() {
 
     const handleHomeClick = () => {
         playClickSound();
-        setTimeout(() => navigate('/'), 100);
+        setTimeout(() => navigate('/'), 500);
     };
 
     const handleSoundToggle = () => {
@@ -331,6 +298,26 @@ export default function Planets() {
         return () => clearInterval(interval);
     }, []);
 
+    const handlePrev = () => {
+        if (index > 0 && !isAnimating.current) {
+            isAnimating.current = true;
+            setIndex(index - 1);
+            playScrollSound();
+            playClickSound();
+        }
+    };
+
+    const handleNext = () => {
+        if (index < totalItems - 1 && !isAnimating.current) {
+            isAnimating.current = true;
+            setIndex(index + 1);
+            playScrollSound();
+            playClickSound();
+
+        }
+    };
+
+
     return (
         <section className="h-screen overflow-hidden relative bg-black" ref={containerRef}>
             {!isLoaded || !isSunReady ? (
@@ -354,14 +341,47 @@ export default function Planets() {
                                     </div>
 
                                     <div className='w-full flex justify-between items-center px-4 absolute bottom-4 md:px-6'>
-                                        <div className='font-nebula text-2xl text-white/90 glow-text md:text-3xl lg:text-4xl'>
+                                        <div className='font-nebula text-2xl text-primary/50 md:text-3xl lg:text-4xl'>
                                             <p> {time}</p>
                                             <p className='text-lg md:text-xl'> {date}</p>
                                         </div>
-                                        <div className="flex flex-col justify-center items-end text-white/90 glow-text">
+                                        <div className="flex flex-col justify-center items-end text-primary/50">
                                             <p className="font-nebula text-2xl font-bold text-center md:text-3xl lg:text-4xl">{speed.toLocaleString()}</p>
                                             <p className="font-nebula text-lg tracking-widest text-center md:text-xl">KM/M</p>
                                         </div>
+                                    </div>
+
+                                    {/* left button */}
+                                    <div
+                                        onClick={handlePrev}
+                                        className=' cursor-pointer absolute top-1/2 left-0 -translate-y-1/2 p-2 flex justify-center items-center bg-primary/50 h-1/2'
+                                        style={{
+                                            clipPath: ' polygon(0% 0%, 100% 5%, 100% 95%, 0% 100%)'
+                                        }}
+                                    >
+                                        <button
+                                            style={{
+                                                clipPath: ' polygon(100% 0, 0 50%, 100% 100%)'
+                                            }}
+                                            className="w-3 h-4 bg-white cursor-pointer "
+                                            aria-label="Close"
+                                        ></button>
+                                    </div>
+                                    {/* right button */}
+                                    <div
+                                        onClick={handleNext}
+                                        className=' cursor-pointer absolute top-1/2 right-0 -translate-y-1/2 p-2 flex justify-center items-center bg-primary/50 h-1/2'
+                                        style={{
+                                            clipPath: ' polygon(0% 5%, 100% 0%, 100% 100%, 0% 95%)'
+                                        }}
+                                    >
+                                        <button
+                                            style={{
+                                                clipPath: ' polygon(100% 0, 0 50%, 100% 100%)'
+                                            }}
+                                            className="rotate-180 w-3 h-4 bg-white cursor-pointer "
+                                            aria-label="Close"
+                                        ></button>
                                     </div>
                                 </div>
                             </div>
@@ -410,7 +430,8 @@ export default function Planets() {
                             </ul>
                         </div>
                     </>
-                )}
-        </section>
+                )
+            }
+        </section >
     );
 }

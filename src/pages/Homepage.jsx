@@ -12,21 +12,29 @@ export default function Homepage() {
     const [time, setTime] = useState("");
     const [date, setDate] = useState("");
     const [speed, setSpeed] = useState(10500);
+    const hasPlayedLoading = useRef(false);
+
 
     const borderRef = useRef();
     const contentRef = useRef();
     const hudRef = useRef();
     const topHudRef = useRef();
     const navigate = useNavigate();
-    const { playClickSound, isSoundOn, setIsSoundOn, playHoverSound } = useContext(SoundContext)
+    const { playClickSound, isSoundOn, setIsSoundOn, playHoverSound, playLoadingSound } = useContext(SoundContext)
 
     useEffect(() => {
         const timeout = setTimeout(() => {
             setIsLoaded(true);
-        }, 1500); // You can adjust this delay
+        }, 1500);
+
+        if (!hasPlayedLoading.current) {
+            playLoadingSound();
+            hasPlayedLoading.current = true;
+        }
 
         return () => clearTimeout(timeout);
     }, []);
+
 
     useEffect(() => {
         if (!isLoaded || !borderRef.current || !contentRef.current) return;
@@ -83,7 +91,7 @@ export default function Homepage() {
         playClickSound();
         setTimeout(() => {
             navigate('/planets');
-        }, 300);
+        }, 200);
     };
 
     // time date
@@ -147,18 +155,18 @@ export default function Homepage() {
                     <div className='relative w-full h-screen bg-gray p-4 md:p-10 lg:p-14'>
                         <div ref={borderRef} className='absolute top-0 primary-border w-full h-full z-30'>
                             <div ref={hudRef} className='w-full flex justify-between items-center px-4 absolute bottom-4 md:px-6'>
-                                <div className='font-nebula text-2xl text-white/90 glow-text md:text-3xl lg:text-4xl'>
+                                <div className='font-nebula text-2xl text-primary/50 md:text-3xl lg:text-4xl'>
                                     <p> {time}</p>
                                     <p className='text-lg md:text-xl'> {date}</p>
                                 </div>
-                                <div className="flex flex-col justify-center items-end text-white/90 glow-text">
+                                <div className="flex flex-col justify-center items-end text-primary/50">
                                     <p className="font-nebula text-2xl font-bold text-center md:text-3xl lg:text-4xl">{speed.toLocaleString()}</p>
                                     <p className="font-nebula text-lg tracking-widest text-center md:text-xl">KM/M</p>
                                 </div>
                             </div>
 
                             <div ref={topHudRef} className='w-full flex justify-between items-center px-4 absolute top-4 md:px-6 z-40'>
-                                <div className='font-nebula text-white/90 glow-text text-lg md:text-xl'>
+                                <div className='font-nebula text-primary/50 text-lg md:text-xl'>
                                     <p className='text-lg md:text-xl'> SYSTEM: Online </p>
 
                                 </div>
