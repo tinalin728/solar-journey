@@ -119,9 +119,9 @@ button {
 .notch-static {
   fill: none;
   stroke: #00ffc3;
-  opacity: .5;
+  stroke-opacity: .5;
   stroke-width: 2;
-  filter: drop-shadow(0 0 10px #00ffc3)
+  filter: drop-shadow(0 0 10px rgba(0, 255, 195, 0.8));
 }
 
 .notch-animated {
@@ -142,7 +142,6 @@ button {
   --btn-transition: .3s;
   --btn-letter-spacing: .05rem;
   --btn-animation-duration: 1.2s;
-  --btn-shadow-color: rgba(0, 0, 0, 0.137);
   --default-btn-color: #00ffc3;
   --font-size: 18px;
   --font-family: 'Nebula', sans-serif;
@@ -167,9 +166,6 @@ button {
   letter-spacing: var(--btn-letter-spacing);
   transition: var(--btn-transition);
   position: relative;
-  /* width: 100%;
-  height: 100%; */
-  /* @apply flex justify-center items-center */
 }
 
 .ui-btn span::before {
@@ -350,7 +346,7 @@ button {
 /* Add to your CSS file */
 
 .fade-out {
-  animation: fadeOut .5s ease forwards;
+  animation: fadeOut 8s ease forwards;
 }
 
 @keyframes fadeOut {

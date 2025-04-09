@@ -26,13 +26,13 @@ export default function Planets() {
     const [date, setDate] = useState("");
     const [speed, setSpeed] = useState(10500);
 
-
     const containerRef = useRef();
     const cardsRef = useRef([]);
     const borderRef = useRef(null);
     const textRef = useRef([]);
     const preloaderRef = useRef(null);
     const contentRef = useRef(null);
+    const planetsRef = useRef(null);
 
     const totalItems = planets.length;
     const isAnimating = useRef(false);
@@ -68,7 +68,7 @@ export default function Planets() {
 
         queue.on('complete', () => {
             if (preloaderRef.current) {
-                preloaderRef.current.classList.add('fade-out');
+                // preloaderRef.current.classList.add('fade-out');
 
                 setTimeout(() => {
 
@@ -78,7 +78,7 @@ export default function Planets() {
 
                     setIsSunReady(true);
                     setIsLoaded(true);
-                }, 1000);
+                }, 1500);
             };
         });
 
@@ -87,9 +87,12 @@ export default function Planets() {
             setIsLoaded(true);
         });
 
+
         return () => {
             queue.removeAllEventListeners();
         };
+
+
     }, [planets]);
 
     // planet position
@@ -130,6 +133,13 @@ export default function Planets() {
             ease: "power4.out"
         });
 
+        tl.to(planetsRef.current, {
+            opacity: 1,
+            pointerEvents: "auto",
+            duration: 0.5,
+            ease: "power1.out",
+        });
+
         // Set initial planet positions
         cardsRef.current.forEach((card, i) => {
             const offset = i - index;
@@ -139,7 +149,7 @@ export default function Planets() {
                 transformPerspective: 2000,
                 transformOrigin: "center",
                 zIndex: i === index ? 10 : 0,
-            });
+            }, "-=0.8");
         });
 
     }, [isLoaded]);
@@ -320,7 +330,7 @@ export default function Planets() {
 
     return (
         <section className="h-screen overflow-hidden relative bg-black" ref={containerRef}>
-            {!isLoaded || !isSunReady ? (
+            {!isLoaded ? (
                 <div ref={preloaderRef} id='preloader'>
                     <LoadingScreen />
                 </div>
@@ -398,7 +408,7 @@ export default function Planets() {
 
                             </div>
 
-                            <ul className="perspective-wrapper w-full h-full">
+                            <ul ref={planetsRef} className="opacity-0 perspective-wrapper w-full h-full">
                                 {planets.map((planet, i) => (
                                     <li
                                         key={planet.name}

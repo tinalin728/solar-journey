@@ -1,7 +1,7 @@
 const planets = [
     {
         name: 'Sun',
-        model: '/sun.glb',
+        model: '/sun_comp.glb',
         needsEnv: true,
         glowClass: 'glow-wrapper',
         description: 'The Sun is the star at the center of the Solar System and the source of light and heat for all planets.',
@@ -19,7 +19,7 @@ const planets = [
     },
     {
         name: 'Mercury',
-        model: '/mercury2.glb',
+        model: '/mercury_comp.glb',
         glowClass: '',
         needsEnv: false,
         description: 'Mercury is the smallest planet in the Solar System and closest to the Sun.',
@@ -37,7 +37,7 @@ const planets = [
     },
     {
         name: 'Venus',
-        model: '/venus.glb',
+        model: '/venus1.glb',
         glowClass: '',
         needsEnv: false,
         description: 'Venus is the second planet from the Sun and has a thick, toxic atmosphere.',
@@ -55,7 +55,7 @@ const planets = [
     },
     {
         name: 'Earth',
-        model: '/earth.glb',
+        model: '/earth_comp.glb',
         glowClass: '',
         needsEnv: false,
         description: 'Earth is the third planet from the Sun and the only astronomical object known to harbor life.',
@@ -73,7 +73,7 @@ const planets = [
     },
     {
         name: 'Mars',
-        model: '/mars.glb',
+        model: '/mars_comp.glb',
         glowClass: '',
         needsEnv: false,
         description: 'Mars is known as the Red Planet and is home to the tallest mountain in the Solar System.',
@@ -91,7 +91,7 @@ const planets = [
     },
     {
         name: 'Jupiter',
-        model: '/jupiter.glb',
+        model: '/jupiter_comp.glb',
         glowClass: '',
         needsEnv: false,
         description: 'Jupiter is the largest planet in the Solar System and has a giant red storm.',
@@ -109,7 +109,7 @@ const planets = [
     },
     {
         name: 'Saturn',
-        model: '/saturn.glb',
+        model: '/saturn_comp.glb',
         modelScale: '2 2 2',
         glowClass: '',
         needsEnv: false,
@@ -128,7 +128,7 @@ const planets = [
     },
     {
         name: 'Uranus',
-        model: '/uranus.glb',
+        model: '/uranus_comp.glb',
         glowClass: '',
         needsEnv: false,
         description: 'Uranus rotates on its side and has a pale blue color due to methane in its atmosphere.',
@@ -146,7 +146,7 @@ const planets = [
     },
     {
         name: 'Neptune',
-        model: '/neptune.glb',
+        model: '/neptune_comp.glb',
         glowClass: '',
         needsEnv: false,
         description: 'Neptune is a deep blue planet known for its strong winds and storms.',

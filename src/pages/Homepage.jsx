@@ -197,12 +197,10 @@ export default function Homepage() {
                                     />
                                 </svg>
 
-                                <div className='flex gap-2'>
-                                    <div className="ui-btn">
-                                        <span className='uppercase font-bold text-primary '>Explore Now</span>
-                                    </div>
-
+                                <div className="ui-btn">
+                                    <span className='uppercase font-bold text-primary '>Explore Now</span>
                                 </div>
+
                             </button>
                         </div>
                     </div>
