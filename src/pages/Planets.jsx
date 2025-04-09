@@ -342,29 +342,29 @@ export default function Planets() {
                                 <div ref={borderRef} className='absolute top-0 primary-border w-full h-full z-30'>
                                     <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 flex gap-2 items-center justify-between max-w-[90rem] w-full mx-auto px-4 md:top-6 md:px-6">
                                         <button onClick={handleHomeClick} >
-                                            <img src={home} alt="home" className='w-[40px]' />
+                                            <img src={home} alt="home" className='w-[40px] opacity-85' />
                                         </button>
                                         <button onClick={handleSoundToggle}>
                                             <img src={isSoundOn ? on : off}
-                                                alt="sound" width={40} />
+                                                alt="sound" width={40} className='opacity-85' />
                                         </button>
                                     </div>
 
                                     <div className='w-full flex justify-between items-center px-4 absolute bottom-4 md:px-6'>
-                                        <div className='font-nebula text-2xl text-primary/50 md:text-3xl lg:text-4xl'>
+                                        <div className='font-nebula text-2xl text-primary/80 md:text-3xl lg:text-4xl'>
                                             <p> {time}</p>
                                             <p className='text-lg md:text-xl'> {date}</p>
                                         </div>
-                                        <div className="flex flex-col justify-center items-end text-primary/50">
-                                            <p className="font-nebula text-2xl font-bold text-center md:text-3xl lg:text-4xl">{speed.toLocaleString()}</p>
-                                            <p className="font-nebula text-lg tracking-widest text-center md:text-xl">KM/M</p>
+                                        <div className="flex flex-col justify-center items-end">
+                                            <p className="font-nebula text-2xl font-bold text-center md:text-3xl lg:text-4xl text-primary/80">{speed.toLocaleString()}</p>
+                                            <p className="font-nebula text-lg tracking-widest text-center md:text-xl text-primary/80">KM/M</p>
                                         </div>
                                     </div>
 
                                     {/* left button */}
                                     <div
                                         onClick={handlePrev}
-                                        className=' cursor-pointer absolute top-1/2 left-0 -translate-y-1/2 p-2 flex justify-center items-center bg-primary/50 h-1/2'
+                                        className=' cursor-pointer absolute top-1/2 left-0 -translate-y-1/2 p-2 flex justify-center items-center bg-primary/50 h-1/3 md:h-1/2'
                                         style={{
                                             clipPath: ' polygon(0% 0%, 100% 5%, 100% 95%, 0% 100%)'
                                         }}
@@ -380,7 +380,7 @@ export default function Planets() {
                                     {/* right button */}
                                     <div
                                         onClick={handleNext}
-                                        className=' cursor-pointer absolute top-1/2 right-0 -translate-y-1/2 p-2 flex justify-center items-center bg-primary/50 h-1/2'
+                                        className=' cursor-pointer absolute top-1/2 right-0 -translate-y-1/2 p-2 flex justify-center items-center bg-primary/50 h-1/3 md:h-1/2'
                                         style={{
                                             clipPath: ' polygon(0% 5%, 100% 0%, 100% 100%, 0% 95%)'
                                         }}
