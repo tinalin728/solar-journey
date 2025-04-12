@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState, useContext } from 'react'
 import gsap from 'gsap';
 import { SoundContext } from './SoundProvider';
+import planetsData from "../data/planets"
 
 
 export default function PlanetInfoModalContent({ onClose, planetData }) {
@@ -47,7 +48,7 @@ export default function PlanetInfoModalContent({ onClose, planetData }) {
 
     return (
         <div data-lenis-prevent ref={modalRef} className='fixed inset-0 z-50 p-6 md:p-14 flex items-center justify-center backdrop-blur-xl bg-black/50'>
-            <div className='relative w-full p-2 md:p-8 lg:p-10 h-full max-h-[95vh] text-primary primary-border overflow-hidden' >
+            <div className='relative w-full p-2 md:p-8 lg:p-10 h-full max-h-[95vh] text-primary primary-border ' >
                 <div onClick={handleClose}
                     className='trapezoid cursor-pointer absolute left-1/2 top-0 -translate-x-1/2 w-1/2 p-2 flex justify-center items-center'>
                     <button
@@ -67,23 +68,41 @@ export default function PlanetInfoModalContent({ onClose, planetData }) {
                     </div>
 
                     <div className='mt-10 flex flex-col gap-10 md:flex-row'>
-                        <div className="flex-1 h-full grid grid-cols-2 border border-primary/50 text-tiny md:text-sm w-fit">
-                            {planetData.facts.map(([label, value], i) => (
-                                <>
-                                    <p key={`label-${i}`} className={`p-4 font-bold uppercase tracking-widest ${i % 2 === 0 ? 'bg-primary/15 text-white' : ''}`}>
-                                        {label}
-                                    </p>
-                                    <p key={`value-${i}`} className={`p-4 ${i % 2 === 0 ? 'bg-primary/15 text-white' : ''}`}>
-                                        {value}
-                                    </p>
-                                </>
-                            ))}
+                        <div className='flex-1 w-full  h-fit sticky top-20'>
+                            <model-viewer
+                                key={planetData.name}
+                                className="w-full p-2  h-[230px] md:w-[300px] md:h-[280px] lg:w-full lg:h-[510px]"
+                                src={planetData.model}
+                                loading="eager"
+                                auto-rotate
+                                camera-controls
+                                tone-mapping="reinhard"
+                                {...(planetData.needsEnv && { 'environment-image': '/space.hdr' })}
+                            ></model-viewer>
                         </div>
 
-                        {/* Fun Fact */}
-                        <div className='h-full flex-1'>
-                            <h4 className='text-2xl uppercase font-bold tracking-widest mb-3 text-white glow-text'>Fun Facts</h4>
-                            <p className=''>{planetData.funFacts}</p>
+                        <div className='flex-1 w-full h-fit'>
+                            <div className="w-full h-fit grid grid-cols-2 border border-primary/50 text-tiny md:text-sm">
+                                {planetData.facts.map(([label, value], i) => (
+                                    <>
+                                        <p key={`label-${i}`} className={`p-4 border-r-[.5px] border-dashed border-primary/50 font-bold uppercase tracking-widest text-white glow-text ${i % 2 === 0 ? 'bg-primary/15' : ''}`}>
+                                            {label}
+                                        </p>
+                                        <p key={`value-${i}`} className={`p-4 ${i % 2 === 0 ? 'bg-primary/15' : ''}`}>
+                                            {value}
+                                        </p>
+                                    </>
+                                ))}
+                            </div>
+
+                            {/* Fun Fact */}
+                            <div className='h-full flex-1 mt-10 border p-4 border-primary/50'>
+                                <h4 className='text-2xl uppercase font-bold tracking-widest mb-3 text-white glow-text'>Fun Facts</h4>
+                                <p className=''>{planetData.funFacts}</p>
+                                <div className=' mt-10 border p-4 w-full flex justify-center items-center '>
+                                    <a href='/' > View More On NASA</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

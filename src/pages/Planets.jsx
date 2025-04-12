@@ -340,7 +340,7 @@ export default function Planets() {
                         <div ref={contentRef} id='content' className='relative h-full z-20 w-full'>
                             <div className='absolute w-full h-screen p-4 md:p-10 lg:p-14 z-30'>
                                 <div ref={borderRef} className='absolute top-0 primary-border w-full h-full z-30'>
-                                    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 flex gap-2 items-center justify-between max-w-[90rem] w-full mx-auto px-4 md:top-6 md:px-6">
+                                    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 flex gap-2 items-center justify-between w-full mx-auto px-4 md:top-6 md:px-6">
                                         <button onClick={handleHomeClick} >
                                             <img src={home} alt="home" className='w-[40px] opacity-85' />
                                         </button>
@@ -405,7 +405,6 @@ export default function Planets() {
                                     modalOpenRef={modalOpenRef}
                                     planet={currentPlanet}
                                 />
-
                             </div>
 
                             <ul ref={planetsRef} className="opacity-0 perspective-wrapper w-full h-full">
