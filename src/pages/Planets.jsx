@@ -418,7 +418,7 @@ export default function Planets() {
                                             <div className={`${planet.glowClass} transition-all duration-500`} style={{ filter: planet.blur }}>
                                                 <model-viewer
                                                     key={planet.name}
-                                                    className="w-[230px] h-[230px] md:w-[280px] md:h-[280px] lg:w-[320px] lg:h-[320px]"
+                                                    className="w-[230px] h-[230px] md:w-[280px] md:h-[280px] lg:w-[320px] lg:h-[320px] xl:w-[340px] xl:h-[340px]"
                                                     src={planet.model}
                                                     loading="eager"
                                                     auto-rotate

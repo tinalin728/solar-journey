@@ -71,7 +71,7 @@ export default function PlanetInfoModalContent({ onClose, planetData }) {
                         <div className='flex-1 w-full  h-fit md:sticky md:top-20'>
                             <model-viewer
                                 key={planetData.name}
-                                className="w-full p-2  h-[230px] md:w-[300px] md:h-[280px] lg:w-full lg:h-[510px]"
+                                className="w-full p-2 h-[230px] md:w-[300px] md:h-[280px] lg:w-full lg:h-[510px]"
                                 src={planetData.model}
                                 loading="eager"
                                 auto-rotate
