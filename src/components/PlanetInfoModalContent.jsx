@@ -76,6 +76,7 @@ export default function PlanetInfoModalContent({ onClose, planetData }) {
                                 loading="eager"
                                 auto-rotate
                                 camera-controls
+                                disable-pan
                                 tone-mapping="reinhard"
                                 {...(planetData.needsEnv && { 'environment-image': '/space.hdr' })}
                             ></model-viewer>
@@ -105,12 +106,7 @@ export default function PlanetInfoModalContent({ onClose, planetData }) {
                                         VIEW MORE FACTS
                                     </span>
                                 </a>
-                                {/* <div className='mt-10 p-4 w-full flex justify-center items-center bg-primary'>
-                                    <a href={planetData.link} target='_blank' className='text-white font-nebula'>
-                                        VIEW MORE FACTS
 
-                                    </a>
-                                </div> */}
                             </div>
                         </div>
                     </div>
