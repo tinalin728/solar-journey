@@ -4,7 +4,7 @@ const planets = [
         model: '/sun_comp.glb',
         needsEnv: true,
         glowClass: 'glow-wrapper',
-        description: 'The Sun is the star at the center of the Solar System and the source of light and heat for all planets.',
+        description: 'Though not a planet, the Sun is the star at the center of the Solar System and the source of light and heat for all planets.',
         facts: [
             ['Type', 'Yellow Dwarf Star'],
             ['Equatorial Diameter', '865,374 mi'],
@@ -15,7 +15,9 @@ const planets = [
             ['Surface Gravity', '274 m/s²'],
             ['Surface Temperature', '5,778 K (9,941°F)']
         ],
-        funFacts: `The Sun is not just a giant ball of fire — it’s a star made of burning gas, mostly hydrogen and helium. It provides the light and warmth we need to survive. Even though it's 93 million miles away, it takes only 8 minutes for sunlight to reach Earth. The Sun is so massive that over 1 million Earths could fit inside it! Without the Sun, life as we know it wouldn't exist.`
+        funFacts: `The Sun is not just a giant ball of fire — it’s a star made of burning gas, mostly hydrogen and helium. It provides the light and warmth we need to survive. Even though it's 93 million miles away, it takes only 8 minutes for sunlight to reach Earth. The Sun is so massive that over 1 million Earths could fit inside it! Without the Sun, life as we know it wouldn't exist.`,
+        link: 'https://science.nasa.gov/sun/facts/'
+
     },
     {
         name: 'Mercury',
@@ -33,7 +35,8 @@ const planets = [
             ['Surface Gravity', '3.7 m/s²'],
             ['Surface Temperature', '-173 to 427°C']
         ],
-        funFacts: `Mercury is the smallest planet and the closest to the Sun, but it’s not the hottest! Because it has no atmosphere to trap heat, it gets extremely hot during the day and freezing cold at night. A single day on Mercury (sunrise to sunrise) is longer than its year. It’s covered in craters, much like our Moon.`
+        funFacts: `Mercury is the smallest planet and the closest to the Sun, but it’s not the hottest! Because it has no atmosphere to trap heat, it gets extremely hot during the day and freezing cold at night. A single day on Mercury (sunrise to sunrise) is longer than its year. It’s covered in craters, much like our Moon.`,
+        link: 'https://science.nasa.gov/mercury/facts/'
     },
     {
         name: 'Venus',
@@ -51,7 +54,8 @@ const planets = [
             ['Surface Gravity', '8.87 m/s²'],
             ['Surface Temperature', '471°C (880°F)']
         ],
-        funFacts: `Venus is sometimes called Earth’s twin because of its size and shape, but it's far from friendly. Its thick atmosphere traps heat like a giant oven, making it the hottest planet. It rains acid and the pressure on its surface would crush a human. Oddly enough, Venus spins backward and very slowly — a day on Venus is longer than a year!`
+        funFacts: `Venus is sometimes called Earth’s twin because of its size and shape, but it's far from friendly. Its thick atmosphere traps heat like a giant oven, making it the hottest planet. It rains acid and the pressure on its surface would crush a human. Oddly enough, Venus spins backward and very slowly — a day on Venus is longer than a year!`,
+        link: 'https://science.nasa.gov/venus/venus-facts/'
     },
     {
         name: 'Earth',
@@ -69,7 +73,8 @@ const planets = [
             ['Surface Gravity', '9.8 m/s²'],
             ['Surface Temperature', '13°C average']
         ],
-        funFacts: `This is where we live! Earth is the only planet we know that supports life. It has oceans, air to breathe, and a protective magnetic field. Earth’s atmosphere keeps temperatures just right and shields us from harmful space radiation. It also has one moon, which helps control ocean tides and keeps our climate stable.`
+        funFacts: `This is where we live! Earth is the only planet we know that supports life. It has oceans, air to breathe, and a protective magnetic field. Earth’s atmosphere keeps temperatures just right and shields us from harmful space radiation. It also has one moon, which helps control ocean tides and keeps our climate stable.`,
+        link: 'https://science.nasa.gov/earth/facts/'
     },
     {
         name: 'Mars',
@@ -87,7 +92,8 @@ const planets = [
             ['Surface Gravity', '3.71 m/s²'],
             ['Surface Temperature', '-63°C average']
         ],
-        funFacts: `Known as the Red Planet, Mars gets its color from iron in the soil. It has the tallest volcano in the solar system and once had flowing water. Scientists think it may have supported life a long time ago, and many believe we could live there in the future. Mars has seasons, dust storms, and polar ice caps — just like Earth.`
+        funFacts: `Known as the Red Planet, Mars gets its color from iron in the soil. It has the tallest volcano in the solar system and once had flowing water. Scientists think it may have supported life a long time ago, and many believe we could live there in the future. Mars has seasons, dust storms, and polar ice caps — just like Earth.`,
+        link: 'https://science.nasa.gov/earth/facts/'
     },
     {
         name: 'Jupiter',
@@ -105,7 +111,8 @@ const planets = [
             ['Surface Gravity', '24.79 m/s²'],
             ['Surface Temperature', '-108°C']
         ],
-        funFacts: `Jupiter is the giant of our solar system — more than 1,300 Earths could fit inside! It has a massive storm called the Great Red Spot that’s been spinning for centuries. Jupiter has more than 90 moons, including Ganymede, the largest moon in the entire solar system. Its gravity protects the inner planets by pulling in comets and asteroids.`
+        funFacts: `Jupiter is the giant of our solar system — more than 1,300 Earths could fit inside! It has a massive storm called the Great Red Spot that’s been spinning for centuries. Jupiter has more than 90 moons, including Ganymede, the largest moon in the entire solar system. Its gravity protects the inner planets by pulling in comets and asteroids.`,
+        link: 'https://science.nasa.gov/jupiter/facts/'
     },
     {
         name: 'Saturn',
@@ -124,7 +131,8 @@ const planets = [
             ['Surface Gravity', '10.44 m/s²'],
             ['Surface Temperature', '-139°C']
         ],
-        funFacts: `Saturn is famous for its stunning rings made of ice and rock chunks. It’s so light that it could float in water — if you could find a big enough bathtub! Even though it’s huge, a day on Saturn only lasts about 10 hours. Some of its moons may have oceans under their surfaces, possibly holding signs of life.`
+        funFacts: `Saturn is famous for its stunning rings made of ice and rock chunks. It’s so light that it could float in water — if you could find a big enough bathtub! Even though it’s huge, a day on Saturn only lasts about 10 hours. Some of its moons may have oceans under their surfaces, possibly holding signs of life.`,
+        link: 'https://science.nasa.gov/saturn/facts/'
     },
     {
         name: 'Uranus',
@@ -142,7 +150,8 @@ const planets = [
             ['Surface Gravity', '8.69 m/s²'],
             ['Surface Temperature', '-195°C']
         ],
-        funFacts: `Uranus is unique because it spins on its side, like a rolling ball. This means its poles get 42 years of sunlight and 42 years of darkness! It’s icy and pale blue due to methane gas in the atmosphere. Scientists believe Uranus might have a rocky core surrounded by icy materials and a thick atmosphere.`
+        funFacts: `Uranus is unique because it spins on its side, like a rolling ball. This means its poles get 42 years of sunlight and 42 years of darkness! It’s icy and pale blue due to methane gas in the atmosphere. Scientists believe Uranus might have a rocky core surrounded by icy materials and a thick atmosphere.`,
+        link: 'https://science.nasa.gov/uranus/facts/'
     },
     {
         name: 'Neptune',
@@ -160,7 +169,28 @@ const planets = [
             ['Surface Gravity', '11.15 m/s²'],
             ['Surface Temperature', '-201°C']
         ],
-        funFacts: `Neptune is the farthest planet from the Sun and has the strongest winds in the solar system — up to 1,200 mph! It’s a deep blue ice giant, and even though it’s far away, it still has weather like storms and clouds. Neptune’s moon Triton orbits backward, which may mean it was captured from space.`
+        funFacts: `Neptune is the farthest planet from the Sun and has the strongest winds in the solar system — up to 1,200 mph! It’s a deep blue ice giant, and even though it’s far away, it still has weather like storms and clouds. Neptune’s moon Triton orbits backward, which may mean it was captured from space.`,
+        link: 'https://science.nasa.gov/neptune/facts/'
+    },
+    {
+        name: 'Pluto',
+        model: '/pluto1.glb',
+        needsEnv: false,
+        glowClass: 'glow-wrapper',
+        description: 'Pluto is a dwarf planet located in the Kuiper Belt beyond Neptune. Once considered the ninth planet, it was reclassified in 2006 due to its size and orbital characteristics.',
+        facts: [
+            ['Type', 'Dwarf Planet'],
+            ['Diameter', '1,473 mi'],
+            ['Mass', '1.31 × 10²² kg'],
+            ['Distance from Sun', '3.67 billion mi'],
+            ['Orbit Period', '248 Earth years'],
+            ['Rotation Period', '6.4 Earth days'],
+            ['Surface Gravity', '0.62 m/s²'],
+            ['Surface Temperature', '-375°F (−225°C)']
+        ],
+        funFacts: `Pluto was discovered in 1930 and named by an 11-year-old girl. Though no longer a full-fledged planet, it still orbits the Sun and has five known moons — the largest is Charon, which is almost half Pluto's size! Because of its eccentric orbit, Pluto is sometimes closer to the Sun than Neptune. It has a heart-shaped glacier and a thin atmosphere that expands when it's closer to the Sun.`,
+        link: 'https://science.nasa.gov/pluto/facts/'
+
     }
 ];
 

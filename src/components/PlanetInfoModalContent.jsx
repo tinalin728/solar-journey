@@ -68,7 +68,7 @@ export default function PlanetInfoModalContent({ onClose, planetData }) {
                     </div>
 
                     <div className='mt-10 flex flex-col gap-10 md:flex-row'>
-                        <div className='flex-1 w-full  h-fit sticky top-20'>
+                        <div className='flex-1 w-full  h-fit md:sticky md:top-20'>
                             <model-viewer
                                 key={planetData.name}
                                 className="w-full p-2  h-[230px] md:w-[300px] md:h-[280px] lg:w-full lg:h-[510px]"
@@ -99,9 +99,18 @@ export default function PlanetInfoModalContent({ onClose, planetData }) {
                             <div className='h-full flex-1 mt-10 border p-4 border-primary/50'>
                                 <h4 className='text-2xl uppercase font-bold tracking-widest mb-3 text-white glow-text'>Fun Facts</h4>
                                 <p className=''>{planetData.funFacts}</p>
-                                <div className=' mt-10 border p-4 w-full flex justify-center items-center '>
-                                    <a href='/' > View More On NASA</a>
-                                </div>
+
+                                <a href={planetData.link} target='_blank' className='text-white font-nebula'>
+                                    <span className='mt-10 p-4 w-full flex justify-center items-center bg-primary/50 hover:bg-primary/70 transition duration-200'>
+                                        VIEW MORE FACTS
+                                    </span>
+                                </a>
+                                {/* <div className='mt-10 p-4 w-full flex justify-center items-center bg-primary'>
+                                    <a href={planetData.link} target='_blank' className='text-white font-nebula'>
+                                        VIEW MORE FACTS
+
+                                    </a>
+                                </div> */}
                             </div>
                         </div>
                     </div>
