@@ -152,7 +152,7 @@ export default function Homepage() {
                         <LoadingScreen />
                     </div>
                 ) : (
-                    <div className='relative w-full h-screen bg-gray p-4 md:p-10 lg:p-14'>
+                    <div className='relative w-full h-screen bg-gray p-4 md:p-10 lg:p-14 z-20'>
                         <div ref={borderRef} className='absolute top-0 primary-border w-full h-full z-30'>
                             <div ref={hudRef} className='w-full flex justify-between items-center px-4 absolute bottom-4 md:px-6'>
                                 <div className='font-nebula text-2xl text-primary/80 md:text-3xl lg:text-4xl'>

@@ -33,6 +33,8 @@ export default function Planets() {
     const preloaderRef = useRef(null);
     const contentRef = useRef(null);
     const planetsRef = useRef(null);
+    const hudRef = useRef();
+    const topHudRef = useRef();
 
     const totalItems = planets.length;
     const isAnimating = useRef(false);
@@ -132,6 +134,29 @@ export default function Planets() {
             duration: 1,
             ease: "power4.out"
         });
+        tl.fromTo(
+            topHudRef.current,
+            { opacity: 0, y: 20 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "power2.out",
+            },
+        );
+
+        tl.fromTo(
+            hudRef.current.children,
+            { opacity: 0, y: 20 },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: "power2.out",
+            }
+        );
 
         tl.to(planetsRef.current, {
             opacity: 1,
@@ -149,7 +174,7 @@ export default function Planets() {
                 transformPerspective: 2000,
                 transformOrigin: "center",
                 zIndex: i === index ? 10 : 0,
-            }, "-=0.8");
+            }, "-=0.3");
         });
 
     }, [isLoaded]);
@@ -303,11 +328,12 @@ export default function Planets() {
         const interval = setInterval(() => {
             const fluctuation = Math.floor(Math.random() * 6) - 3;
             setSpeed(prev => Math.max(10200, prev + fluctuation));
-        }, 500); // update every 1 second
+        }, 500);
 
         return () => clearInterval(interval);
     }, []);
 
+    // buttons
     const handlePrev = () => {
         if (index > 0 && !isAnimating.current) {
             isAnimating.current = true;
@@ -340,7 +366,7 @@ export default function Planets() {
                         <div ref={contentRef} id='content' className='relative h-full z-20 w-full'>
                             <div className='absolute w-full h-screen p-4 md:p-10 lg:p-14 z-30'>
                                 <div ref={borderRef} className='absolute top-0 primary-border w-full h-full z-30'>
-                                    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 flex gap-2 items-center justify-between w-full mx-auto px-4 md:top-6 md:px-6">
+                                    <div ref={topHudRef} className="absolute top-4 left-1/2 -translate-x-1/2 z-50 flex gap-2 items-center justify-between w-full mx-auto px-4 md:top-6 md:px-6">
                                         <button onClick={handleHomeClick} >
                                             <img src={home} alt="home" className='w-[40px] opacity-85' />
                                         </button>
@@ -350,7 +376,7 @@ export default function Planets() {
                                         </button>
                                     </div>
 
-                                    <div className='w-full flex justify-between items-center px-4 absolute bottom-4 md:px-6'>
+                                    <div ref={hudRef} className='w-full flex justify-between items-center px-4 absolute bottom-4 md:px-6'>
                                         <div className='font-nebula text-2xl text-primary/80 md:text-3xl lg:text-4xl'>
                                             <p> {time}</p>
                                             <p className='text-lg md:text-xl'> {date}</p>

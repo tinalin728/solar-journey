@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export default function Starfield({
     speedFactor = 0.2,
@@ -6,14 +6,11 @@ export default function Starfield({
     starColor = [255, 255, 255],
     starCount = 8000,
 }) {
-
-
-    const modelRef = useRef();
-    const scrollRef = useRef()
+    const canvasRef = useRef(null);
 
     useEffect(() => {
-        const canvas = document.getElementById('starfield');
-        if (!canvas) return console.error('Canvas element not found');
+        const canvas = canvasRef.current;
+        if (!canvas) return;
 
         const c = canvas.getContext('2d');
         if (!c) return console.error('Could not get 2d context');
@@ -23,10 +20,7 @@ export default function Starfield({
             canvas.height = window.innerHeight;
         };
 
-        // Initial canvas sizing
         setCanvasExtents();
-
-        // Update on window resize
         window.addEventListener('resize', setCanvasExtents);
 
         const makeStars = (count) =>
@@ -90,16 +84,14 @@ export default function Starfield({
 
         requestAnimationFrame(init);
 
-        // Clean up
         return () => {
             window.removeEventListener('resize', setCanvasExtents);
         };
     }, [starColor, backgroundColor, speedFactor, starCount]);
 
-
     return (
         <canvas
-            id="starfield"
+            ref={canvasRef}
             style={{
                 padding: 0,
                 margin: 0,
@@ -111,8 +103,8 @@ export default function Starfield({
                 zIndex: 10,
                 opacity: 1,
                 pointerEvents: 'none',
-                mixBlendMode: 'screen',
+                mixBlendMode: 'normal',
             }}
         />
-    )
+    );
 }
