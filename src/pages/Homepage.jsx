@@ -155,25 +155,22 @@ export default function Homepage() {
                     <div className='relative w-full h-screen bg-gray p-4 md:p-10 lg:p-14 z-20'>
                         <div ref={borderRef} className='absolute top-0 primary-border w-full h-full z-30'>
                             <div ref={hudRef} className='w-full flex justify-between items-center px-4 absolute bottom-4 md:px-6'>
-                                <div className='font-nebula text-2xl text-primary/80 md:text-3xl lg:text-4xl'>
+                                <div className='font-nebula text-2xl text-primary/90 md:text-3xl lg:text-4xl'>
                                     <p> {time}</p>
                                     <p className='text-lg md:text-xl'> {date}</p>
                                 </div>
-                                <div className="flex flex-col justify-center items-end text-primary/80">
+                                <div className="flex flex-col justify-center items-end text-primary/90">
                                     <p className="font-nebula text-2xl font-bold text-center md:text-3xl lg:text-4xl">{speed.toLocaleString()}</p>
                                     <p className="font-nebula text-lg tracking-widest text-center md:text-xl">KM/M</p>
                                 </div>
                             </div>
 
-                            <div ref={topHudRef} className='w-full flex justify-between items-center px-4 absolute top-4 md:px-6 z-40'>
-                                <div className='font-nebula text-primary/80 text-lg md:text-xl'>
-                                    <p className='text-lg md:text-xl'> SYSTEM: Online </p>
-
-                                </div>
-                                <button onClick={handleSoundToggle}
+                            <div ref={topHudRef} className='w-full flex justify-between items-start absolute top-4 md:px-6 z-40'>
+                                <p className='font-nebula text-primary/90 text-lg md:text-xl py-2'> SYSTEM: Online </p>
+                                <button onClick={handleSoundToggle} className='h-10'
                                 >
                                     <img src={isSoundOn ? on : off}
-                                        alt="sound" width={40} className='opacity-85' />
+                                        alt="sound" width={40} className='opacity-80' />
                                 </button>
                             </div>
                         </div>
