@@ -14,4 +14,18 @@ React, GSAP, Tailwind CSS, custom animations, model-viewer, NASA DONKI API for r
 • Responsive layout with consistent spacing and animation timing  
 • Preloader that waits for the Sun model before starting animations  
 
+**Getting Started** 🛠  
+1. Clone the repository  
+2. `npm install`  
+3. `npm run dev`  
+4. Open in your browser
+
+**API Setup** 🔑  
+This project uses the NASA DONKI API, which requires an API key.  
+1. Get your free key here: https://api.nasa.gov  
+2. Create a `.env` file in the root folder  
+3. Add the following line:  
+   `VITE_NASA_API_KEY=your_key_here`  
+4. Restart the dev server
+
 
