@@ -27,7 +27,7 @@ export default function Dashboard({
 
   const { isSoundOn, setIsSoundOn, playScrollSound, playClickSound } =
     useContext(SoundContext);
-  const { groupedFlares } = useSolarFlare();
+  const { groupedFlares, isLoading, error } = useSolarFlare();
 
   const [showModal, setShowModal] = useState(false);
 
@@ -183,6 +183,8 @@ export default function Dashboard({
               createPortal(
                 <SolarFlareReport
                   groupedFlares={groupedFlares}
+                  isLoading={isLoading}
+                  error={error}
                   onClose={() => {
                     if (setModalOpen) setModalOpen(false);           
                     if (modalOpenRef) modalOpenRef.current = false; 

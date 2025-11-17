@@ -3,12 +3,11 @@ import TextButton from "../buttons/TextButton";
 import gsap from "gsap";
 import { SoundContext } from "../../context/SoundProvider";
 
-export default function SolarFlareReport({ onClose, groupedFlares }) {
+export default function SolarFlareReport({ onClose, groupedFlares, isLoading, error }) {
   const reportRef = useRef(null);
   const contentRef = useRef(null);
   const buttonRef = useRef(null);
   const backdropRef = useRef(null);
-  const [isClosing, setIsClosing] = useState(false);
   const { playClickSound, playScrollSound, playLoadingSound } = useContext(SoundContext);
 
   useEffect(() => {
@@ -90,9 +89,9 @@ export default function SolarFlareReport({ onClose, groupedFlares }) {
       ease: "power2.in",
     });
   };
-
+  
   return (
-    <div
+   <div
       ref={backdropRef}
       className="fixed inset-0 z-[9999] bg-black/60 backdrop-blur-[5px] flex items-center justify-center h-screen"
     >
@@ -118,19 +117,28 @@ export default function SolarFlareReport({ onClose, groupedFlares }) {
             <div className="hidden md:block h-[1px] w-full bg-primary/50"></div>
           </div>
 
-          {/* If no data */}
-          {(!groupedFlares || Object.keys(groupedFlares).length === 0) && (
+          {/* Loading state */}
+          {isLoading && (
+            <p className="text-primary text-center text-lg">Loading solar flare data...</p>
+          )}
+
+          {/* Error state */}
+          {error && (
+            <p className="text-red-400 text-center">Error: Failed to fetch data</p>
+          )}
+
+          {/* No data */}
+          {!isLoading && !error && (!groupedFlares || Object.keys(groupedFlares).length === 0) && (
             <p className="text-white text-center opacity-70">
               No solar flare data available for the past 30 days.
             </p>
           )}
 
           {/* Loop each date */}
-          {Object.entries(groupedFlares)
+          {!isLoading && !error && Object.entries(groupedFlares)
             .reverse()
             .map(([date, flares]) => (
               <div key={date} className="mb-10" id="flare-report">
-                {/* Date title */}
                 <div className="relative">
                   <h5 className="text-nowrap text-white uppercase tracking-widest mb-2">
                     {new Date(date + "T00:00:00Z").toLocaleDateString("en-US", {
@@ -141,8 +149,7 @@ export default function SolarFlareReport({ onClose, groupedFlares }) {
                     })}
                   </h5>
 
-                  {/* Each flare on that date */}
-                  {flares.map((flare, index) => {
+                  {flares.map(flare => {
                     const flareFacts = [
                       ["Flare Class", flare.classType],
                       ["Start Time", flare.beginTime.replace("Z", "")],
@@ -191,5 +198,6 @@ export default function SolarFlareReport({ onClose, groupedFlares }) {
         </div>
       </div>
     </div>
+
   );
 }

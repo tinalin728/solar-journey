@@ -118,7 +118,7 @@ button {
 
 /* preloader */
 .track {
-  animation: prgBar 1s linear 1 forwards
+  animation: prgBar 1.1s linear 1 forwards
 }
 
 
