@@ -1,10 +1,11 @@
-// SoundProvider.jsx
 import { createContext, useEffect, useState, useRef } from 'react';
 
 export const SoundContext = createContext();
 
 export const SoundProvider = ({ children }) => {
     const bgMusicRef = useRef(null);
+    const [hasInteracted, setHasInteracted] = useState(false);
+
 
     const [isSoundOn, setIsSoundOn] = useState(() => {
         const saved = localStorage.getItem('soundOn');
@@ -29,6 +30,7 @@ export const SoundProvider = ({ children }) => {
 
     const playClickSound = () => {
         if (!isSoundOn) return;
+        if (!hasInteracted) return;
         const clickSound = new Audio('/sound/click.mp3');
         clickSound.volume = 0.4;
         clickSound.play();
@@ -37,6 +39,7 @@ export const SoundProvider = ({ children }) => {
 
     const playScrollSound = () => {
         if (!isSoundOn) return;
+        if (!hasInteracted) return;
         const swoosh = new Audio('/sound/swoosh.mp3');
         swoosh.volume = 0.3;
         swoosh.play();
@@ -44,18 +47,29 @@ export const SoundProvider = ({ children }) => {
 
     const playHoverSound = () => {
         if (!isSoundOn) return;
+        if (!hasInteracted) return;
         const hoverSound = new Audio('/sound/hover.mp3');
         hoverSound.volume = 0.3;
         hoverSound.play();
     };
 
-    const playLoadingSound = () => {
-        if (!isSoundOn) return;
-        const loading = new Audio('/sound/loading.mp3');
-        loading.volume = 0.3;
-        loading.playbackRate = 1.2; // optional speed tweak
-        loading.play();
-    };
+const playLoadingSound = () => {
+  if (!isSoundOn) return;
+  if (!hasInteracted) return; 
+
+  const loading = new Audio("/sound/loading.mp3");
+  loading.volume = 0.3;
+  loading.playbackRate = 1.2;
+  loading.play();
+};
+
+
+    useEffect(() => {
+  const unlock = () => setHasInteracted(true);
+  window.addEventListener("click", unlock, { once: true });
+  return () => window.removeEventListener("click", unlock);
+}, []);
+
 
     return (
         <SoundContext.Provider value={{ isSoundOn, setIsSoundOn, playClickSound, playScrollSound, playHoverSound, playLoadingSound }}>
