@@ -3,7 +3,7 @@ This project lets users explore planets through an interactive scrolling experie
 
 
 **Tech Stack** 🧩  
-React, GSAP, Tailwind CSS, custom animations, model-viewer, NASA DONKI API for real time solar flare data
+React, GSAP, Tailwind CSS, custom animations, model-viewer, NASA API and NOAA SWPC API for real time space data
 
 **Features** ✨  
 • Scroll based planet navigation  
@@ -27,5 +27,6 @@ This project uses the NASA DONKI API, which requires an API key.
 3. Add the following line:  
    `VITE_NASA_API_KEY=your_key_here`  
 4. Restart the dev server
+
 
 
