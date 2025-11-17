@@ -37,16 +37,17 @@ h1, h2, h3, h4 {
     0 0 10px rgba(0, 255, 195, .5),
     0 0 60px rgba(0, 255, 195);
   filter: brightness(1);
+  line-height: 1.2;
 
   @apply font-nebula font-bold
 }
 
 h1 {
-  @apply text-white text-5xl md:text-[55px]
+  @apply text-white text-[45px] md:text-[55px] 
 }
 
 h2 {
-  @apply text-4xl text-white font-nebula uppercase tracking-widest md:text-5xl
+  @apply text-3xl text-white font-nebula uppercase tracking-widest md:text-5xl
 }
 
 h3 {

@@ -4,6 +4,7 @@ import { createPortal } from "react-dom";
 import gsap from "gsap";
 import useSolarFlare from "../../hooks/useSolarFlare";
 import SolarFlareReport from "../api-modal/SolarFlareReport";
+import SolarWind from "./SolarWind";
 import { SoundContext } from "../../context/SoundProvider";
 import on from "../../../public/icons/sound-on.svg";
 import off from "../../../public/icons/sound-off.svg";
@@ -42,45 +43,6 @@ export default function Dashboard({
 
   // global speed
   const [speed, setSpeed] = useState(10500);
-
-  // time & date loop
-  useEffect(() => {
-    function updateTime() {
-      const now = new Date();
-
-      setTime(
-        now.toLocaleTimeString("en-US", {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: false,
-        })
-      );
-
-      setDate(
-        now.toLocaleDateString("en-US", {
-          year: "numeric",
-          month: "short",
-          day: "2-digit",
-        })
-      );
-    }
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // speed fluctuation loop
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const change = Math.floor(Math.random() * 6) - 3;
-      setSpeed((prev) => Math.max(10200, prev + change));
-    }, 500);
-
-    return () => clearInterval(interval);
-  }, []);
 
   const handleSoundToggle = () => {
     const next = !isSoundOn;
@@ -163,15 +125,10 @@ export default function Dashboard({
         {/* bottom HUD */}
         <div
           ref={hudRef}
-          className="w-full flex justify-center md:justify-between items-end px-4 absolute bottom-4 md:px-6"
+          className="w-full flex flex-col justify-center items-center md:flex-row md:justify-between md:items-end px-4 absolute bottom-4 md:px-6"
         >
           <div>
-            {/* <p className="font-chakra tracking-widest text-primary/80">
-              {speed.toLocaleString()} KM/M
-            </p> */}
-            <p className="hidden md:block !text-sm uppercase tracking-widest text-primary/80">
-              {date} {time}
-            </p>
+            <SolarWind />
           </div>
 
           <div className="flex flex-col justify-center items-end text-primary/90">

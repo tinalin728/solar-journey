@@ -36,13 +36,11 @@ export default function Homepage() {
         </div>
       ) : (
         <Dashboard>
-          
-
           <h1 className="font-nebula font-bold uppercase text-center glow-text -mt-14 md:-mt-10">
             To <br /> Infinity & beyond
           </h1>
 
-          <h3 className="mt-5 text-primary text-center mb-10">
+          <h3 className="mt-5 text-primary text-center mb-4 md:mb-10 !text-xl md:text-3xl">
             Through the Solar System
           </h3>
 

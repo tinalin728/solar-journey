@@ -63,3 +63,9 @@
   height: 70px;
   position:relative;
 }
+
+@media (max-width: 480px) {
+  .ui-btn {
+    --font-size: 17px;
+  }
+}
